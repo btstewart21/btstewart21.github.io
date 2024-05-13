@@ -9,7 +9,7 @@
     body {
         margin: 0;
         padding: 0;
-        height: 100%;
+        height: auto;
         width: 100%;
     }
 
@@ -21,6 +21,12 @@
         color: white;
         padding: 16px;
         background-image: linear-gradient(to bottom, white 1px, black 100%);
+    }
+
+    .unhideElement {
+        color: white;
+        padding: 16px;
+        background-image: linear-gradient(to bottom, darkblue 1px, white 100%);
     }
 
     .title {
@@ -41,12 +47,41 @@
         background: magenta;
     }
 
+    .hidden {
+        width: 100%;
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        background: darkblue;
+        color: white;
+        visibility: hidden;
+    }
+
+    .hidden.unhidden {
+        visibility: visible;
+    }
+
     .blockedP {
         display: block;
     }
 
     .input {
         width: 100px;
+    }
+
+    .labels::before {
+        content: "::before - ";
+        color: red;
+    }
+
+    .labels::after {
+        content: " - ::after";
+        color: blue;
+    }
+
+    hr {
+        opacity: .2;
     }
 </style>
 <script>
@@ -57,7 +92,19 @@
         ele.setAttribute('id', 'alert');
         document.body.appendChild(ele);
         setTimeout(() => ele.remove(), 10000)
+    }
 
+    function unhideElement() {
+        const ele = document.getElementsByClassName('hidden')[0];
+        const btn = document.getElementsByClassName('unhideElement')[0];
+        
+        if (ele.classList.contains('unhidden')) {
+            ele.classList.remove('unhidden');
+            btn.innerHTML = "Show yourself!";
+        } else {
+            ele.classList.add('unhidden');
+            btn.innerHTML = "Ok, go away";
+        }
     }
 
     const events = [
@@ -70,7 +117,8 @@
 
     function changeEvent(event, type) {
         console.log('input changeEvent', type, event);
-    }
+    };
+
     setTimeout(() => {
         const input = document.getElementById('myInput');
 
@@ -97,10 +145,10 @@
         // Please use Strings, Numbers, or Bools for value types.
         pendo.initialize({
             visitor: {
-                id: 'brennan.stewart@pendo.io'   // Required if user is logged in, default creates anonymous ID
-                // email:        // Recommended if using Pendo Feedback, or NPS Email
-                // full_name:    // Recommended if using Pendo Feedback
-                // role:         // Optional
+                // id:          // Required if user is logged in, default creates anonymous ID
+                // email:       // Recommended if using Pendo Feedback, or NPS Email
+                // full_name:   // Recommended if using Pendo Feedback
+                // role:        // Optional
 
                 // You can add any additional visitor level key-values here,
                 // as long as it's not one of the above reserved names.
@@ -121,12 +169,13 @@
         });
     })('4310b424-f450-4688-6e75-a4950d54def3');
 </script>
-
 <body>
     <div class="title">Official BTS Fan Club</div>
     <div class="buttonHolder">
         <p class="blockedP">This button will add an alert to the page </p>
         <button class="addAlert" onclick="addAlert()">Add alert!</button>
+        <p class="blockedP">This button will toggle display a hidden element </p>
+        <button class="unhideElement" onclick="unhideElement()">Show yourself!</button>
         <p class="blockedP">Drop me a like, comment, and subscribe! </p>
         <select class="pets">
             <option value="">Pick a pet</option>
@@ -172,6 +221,12 @@
         <input class="input" type="reset">
         <input class="input" type="submit">
         <input class="input" type="file">
+    </div>
+    <div class="labels">
+        <label id="label">This is a label with something ::before it</label>
+    </div>
+    <div class="hidden">
+        Shhh, this is a hidden element.
     </div>
 </body>
 
